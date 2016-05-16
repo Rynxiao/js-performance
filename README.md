@@ -1,3 +1,3 @@
 # JS性能学习研究
 
-参照《高性能javascript》作的一些笔记以及实例操作
+《高性能javascript》读书小记
