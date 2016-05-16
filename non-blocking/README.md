@@ -133,9 +133,9 @@ xhr.send(null)
 来得知页面是否已经准备好了。
 
 + Additions
-1.The YUI3 approach
-2.The LazyLoad Library
-3.The LABjs Library
+1. The YUI3 approach
+2. The LazyLoad Library
+3. The LABjs Library
 
 
 
