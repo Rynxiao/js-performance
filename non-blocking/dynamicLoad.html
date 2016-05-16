@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>dynamic load</title>
+	<script>
+		function loadScript(url, callback) {
+			var script = document.createElement("script");
+			if(script.readyState) { // IE
+				script.onreadystatechange = function() {
+					if(script.readyState === 'loaded' || script.readyState === 'complete') {
+						script.onreadystatechange = null;
+						callback();
+					}
+				}
+			} else {	// Others
+				script.onload = function() {
+					callback();
+				};
+			}
+			script.src = url;
+			document.getElementsByTagName("head")[0].appendChild(script);
+		}
+
+		loadScript("js/d2.js", function() {
+			console.log("load d2.js");
+		});
+		loadScript("js/d1.js", function() {
+			console.log("load d1.js");
+		});
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

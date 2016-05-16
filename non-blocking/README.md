@@ -17,13 +17,13 @@ Chrome 49/ FireFox 45/ IE exploer 10
 
 **结果**
 ```javascript
-	<script src="js/defer.js" defer></script>
-	<script src="js/normal.js"></script>
-	<script>
-		window.onload = function() {
-			console.log("load");
-		}
-	</script>
+<script src="js/defer.js" defer></script>
+<script src="js/normal.js"></script>
+<script>
+	window.onload = function() {
+		console.log("load");
+	}
+</script>
 ```
 
 控制台依次打印：normal -> defer -> load，浏览器并行加载js
@@ -33,17 +33,17 @@ Chrome 49/ FireFox 45/ IE exploer 10
 
 另外如果代码为直接内嵌
 ```javascript
-	<script defer>
-		console.log("defer");
-	</script>
-	<script>
-		console.log("normal");
-	</script>
-	<script>
-		window.onload = function() {
-			console.log("load");
-		}
-	</script>
+<script defer>
+	console.log("defer");
+</script>
+<script>
+	console.log("normal");
+</script>
+<script>
+	window.onload = function() {
+		console.log("load");
+	}
+</script>
 ```
 
 控制台打印结果为： defer -> normal -> load， 发现并未出现书中的defer情况
@@ -54,23 +54,23 @@ Chrome 49/ FireFox 45/ IE exploer 10
 <head>部分而不会对其余部分的页面代码造成影响（除了用于下载文件的 HTTP 连接）。
 
 ```javascript
-	function loadScript(url, callback) {
-		var script = document.createElement("script");
-		if(script.readyState) { // IE
-			script.onreadystatechange = function() {
-				if(script.readyState === 'loaded' || script.readyState === 'complete') {
-					script.onreadystatechange = null;
-					callback();
-				}
+function loadScript(url, callback) {
+	var script = document.createElement("script");
+	if(script.readyState) { // IE
+		script.onreadystatechange = function() {
+			if(script.readyState === 'loaded' || script.readyState === 'complete') {
+				script.onreadystatechange = null;
+				callback();
 			}
-		} else {	// Others
-			script.onload = function() {
-				callback;
-			};
 		}
-		script.src = url;
-		document.getElementsByTagName_r("head")[0].appendChild(script);
+	} else {	// Others
+		script.onload = function() {
+			callback;
+		};
 	}
+	script.src = url;
+	document.getElementsByTagName("head")[0].appendChild(script);
+}
 ```
 >你可以在页面中动态加载很多 JavaScript 文件，但要注意，浏览器不保证文件加载的顺序。所有主流浏
 览器之中，只有 Firefox 和 Opera 保证脚本按照你指定的顺序执行。其他浏览器将按照服务器返回它们的次
@@ -87,6 +87,30 @@ loadScript("file1.js", function() {
 ```
 >如果多个文件的次序十分重要，更好的办法是将这些文件按照正确的次序连接成一个文件。独立文件可
 以一次性下载所有代码（由于这是异步进行的，使用一个大文件并没有什么损失）。
+
++ XMLHttpRequest Script Injection XHR 脚本注入
+
+```javascript
+var xhr = new XMLHttpRequest();
+xhr.open("get", "file1.js", true);
+xhr.onreadystatechange = function(){
+	if (xhr.readyState == 4){
+		if (xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
+			var script = document.createElement ("script");
+			script.type = "text/javascript";
+			script.text = xhr.responseText;
+			document.body.appendChild(script);
+		}
+	}
+};
+xhr.send(null)
+```
+> 如果收到了一个有效的响应，那么就创建一个新的<script>元素，将它的文本属性设置为从服务器接收到的
+responseText 字符串。这样做实际上会创建一个带有**内联代码的<script>元素**。一旦新<script>元素被添加到
+文档，代码将被执行，并准备使用。
+> 这种方法的主要优点是，你可以下载不立即执行的 JavaScript 代码。由于代码返回在<script>标签之外（换
+句话说不受<script>标签约束），它下载后不会自动执行，这使得你可以推迟执行，直到一切都准备好了。
+另一个优点是，同样的代码在所有现代浏览器中都不会引发异常。
 
 
 
