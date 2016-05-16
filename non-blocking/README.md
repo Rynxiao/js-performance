@@ -108,10 +108,34 @@ xhr.send(null)
 > 如果收到了一个有效的响应，那么就创建一个新的`<script>`元素，将它的文本属性设置为从服务器接收到的
 `responseText` 字符串。这样做实际上会创建一个带有**内联代码的`<script>`元素**。一旦新`<script>`元素被添加到
 文档，代码将被执行，并准备使用。
+
 > 这种方法的主要优点是，你可以下载不立即执行的 `JavaScript` 代码。由于代码返回在`<script>`标签之外（换
 句话说不受`<script>`标签约束），它下载后不会自动执行，这使得你可以推迟执行，直到一切都准备好了。
 另一个优点是，同样的代码在所有现代浏览器中都不会引发异常。
 
++ Recommended Nonblocking Pattern 推荐的非阻塞模式
+
+> 推荐的向页面加载大量 JavaScript 的方法分为两个步骤：第一步，包含动态加载 JavaScript 所需的代码，
+然后加载页面初始化所需的除 JavaScript 之外的部分。这部分代码尽量小，可能只包含 loadScript()函数，
+它下载和运行非常迅速，不会对页面造成很大干扰。当初始代码准备好之后，用它来加载其余的 JavaScript。
+
+```javascript
+<script type="text/javascript" src="loader.js"></script>
+<script type="text/javascript">
+	loadScript("the-rest.js", function(){
+		Application.init();
+	});
+</script>
+```
+> 将此代码放置在 body 的关闭标签`</body>`之前。这样做有几点好处：首先，像前面讨论过的那样，这样
+做确保 JavaScript 运行不会影响页面其他部分显示。其次，当第二部分 JavaScript 文件完成下载，所有应用
+程序所必须的 DOM 已经创建好了，并做好被访问的准备，避免使用额外的事件处理（例如 window.onload）
+来得知页面是否已经准备好了。
+
++ Additions
+1.The YUI3 approach
+2.The LazyLoad Library
+3.The LABjs Library
 
 
 
