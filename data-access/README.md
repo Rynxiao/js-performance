@@ -11,7 +11,7 @@
 
 4. 对象成员(具有字符串索引，存储一个 JavaScript 对象)
 
-+ Identifier Resolution Performance 标识符识别性能
+#### Identifier Resolution Performance 标识符识别性能
 
 > 总的趋势是，对所有浏览器来说，一个标识符所处的位置越深，读写它的速度就越慢。所以，函数中局部
 变量的访问速度总是最快的，而全局变量通常是最慢的（优化的 JavaScript 引擎在某些情况下可以改变这
@@ -56,9 +56,9 @@ function initUI(){
 	bd.className = "active";
 }
 ```
-+ Scope Chain Augmentation 改变作用域链
+#### Scope Chain Augmentation 改变作用域链
 
-#### with表达式
++ with表达式
 
 > 当代码流执行到一个 with 表达式时，运行期上下文的作用域链被临时改变了。一个新的可变对象将被
 创建，它包含指定对象的所有属性。此对象被插入到作用域链的前端，意味着现在函数的所有局部变量都
@@ -87,7 +87,7 @@ function initUI(){
 量。正因为这个原因，最好不要使用 with 表达式。正如前面提到的，只要简单地将 document 存储在一个
 局部变量中，就可以获得性能上的提升。
 
-#### try-catch
++ try-catch
 
 > 当 try 块发生错误时，程序流程自动转入 catch 块，并将异常对象推入作用域链前端的一个
 可变对象中。在 catch 块中，函数的所有局部变量现在被放在第二个作用域链对象中。例如：
