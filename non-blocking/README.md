@@ -48,4 +48,46 @@ Chrome 49/ FireFox 45/ IE exploer 10
 
 控制台打印结果为： defer -> normal -> load， 发现并未出现书中的defer情况
 
++ Dynamic Script Elements 动态脚本元素
+
+>此技术的重点在于：无论在何处启动下载，文件的下载和运行都不会阻塞其他页面处理过程。你甚至可以将这些代码放在
+<head>部分而不会对其余部分的页面代码造成影响（除了用于下载文件的 HTTP 连接）。
+
+```javascript
+	function loadScript(url, callback) {
+		var script = document.createElement("script");
+		if(script.readyState) { // IE
+			script.onreadystatechange = function() {
+				if(script.readyState === 'loaded' || script.readyState === 'complete') {
+					script.onreadystatechange = null;
+					callback();
+				}
+			}
+		} else {	// Others
+			script.onload = function() {
+				callback;
+			};
+		}
+		script.src = url;
+		document.getElementsByTagName_r("head")[0].appendChild(script);
+	}
+```
+>你可以在页面中动态加载很多 JavaScript 文件，但要注意，浏览器不保证文件加载的顺序。所有主流浏
+览器之中，只有 Firefox 和 Opera 保证脚本按照你指定的顺序执行。其他浏览器将按照服务器返回它们的次
+序下载并运行不同的代码文件。你可以将下载操作串联在一起以保证他们的次序，如下：
+
+```javascript
+loadScript("file1.js", function() {
+	loadScript("file2.js", function() {
+		loadScript("file3.js", function() {
+			alert("All files are loaded!");
+		});
+	})
+})
+```
+>如果多个文件的次序十分重要，更好的办法是将这些文件按照正确的次序连接成一个文件。独立文件可
+以一次性下载所有代码（由于这是异步进行的，使用一个大文件并没有什么损失）。
+
+
+
 
