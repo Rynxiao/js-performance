@@ -112,7 +112,7 @@ tmp = computed.backgroundAttachment;
 
 + 最小化重绘和重排版
 
-** *Style changes 改变风格* **
+Style changes 改变风格
 
 ```javascript
 var el = document.getElementById('mydiv');
@@ -189,7 +189,7 @@ appendDataToElement(ul, data);
 
 **优化方法**
 
-一、改变 display 属性，临时从文档上移除<ul>元素然后再恢复它
+一、改变 display 属性，临时从文档上移除`<ul>`元素然后再恢复它
 
 ```javascript
 var ul = document.getElementById('mylist');
