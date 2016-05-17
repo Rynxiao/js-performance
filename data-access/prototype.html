@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>prototype</title>
+</head>
+<body>
+	<script>
+		function execute(count, str) {
+			var startTime = new Date().getTime(),
+				endTime, executeTime;
+			for(var i = 0; i < count; i++) {
+				eval(str);
+			}
+			endTime = new Date().getTime();
+			executeTime = new Date(endTime - startTime).getSeconds() * 1000;
+			console.log("execute time: " + executeTime + 'ms');
+
+		}
+
+		function extend(subClass,superClass){
+			var F = function() {};
+			F.prototype = superClass.prototype;
+			subClass.prototype = new F();
+			subClass.prototype.constructor = subClass;
+			subClass.superClass = superClass.prototype;
+			if(superClass.prototype.constructor == Object.prototype.constructor){
+				superClass.prototype.constructor = superClass;
+			}
+		}
+
+		function Parent(name) {
+			this.name = name;
+		}
+
+		Parent.prototype.sayHello = function() {
+			console.log(this.name + " say Hello");
+		}
+
+		function Children(name, age) {
+			Children.superClass.constructor.call(this, name);
+			this.age = age;
+		}
+
+		extend(Children, Parent);
+
+		Children.prototype.sayAge = function() {
+			console.log(this.name + " say Age");
+		}
+
+		var child = new Children("Lily", 24);
+		execute(10000, "child.sayHello()");
+		execute(10000, "child.sayAge()");
+
+
+		// console 测试无果--
+	</script>
+</body>
+</html>

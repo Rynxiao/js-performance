@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Global And Local</title>
+</head>
+<body>
+	<script>
+		var b = 1;
+		function execute(count, value) {
+			var startTime = new Date().getTime(),
+				endTime, executeTime;
+			for(var i = 0; i < count; i++) {
+				value++;
+			}
+			endTime = new Date().getTime();
+			executeTime = new Date(endTime - startTime).getSeconds() * 1000;
+			console.log("execute time: " + executeTime + 'ms');
+
+		}
+
+		function testGlobal() {
+			execute(3000000000, b);
+		}
+
+		function testLocal() {
+			var a = 4;
+			execute(3000000000, a);
+		}
+
+		testGlobal();
+		testLocal();
+
+		// console 测试无果--
+	</script>
+</body>
+</html>
